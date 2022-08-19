@@ -6,7 +6,10 @@
     "build": "run-p type-check build-only",
     "preview": "vite preview --port 4173",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
+    "type-check": "vue-tsc --noEmit",
+    "codegen": "run-p codegen:typechain codegen:graphql",
+    "codegen:graphql": "graphql-codegen",
+    "codegen:typechain": "typechain --target ethers-v5 --out-dir src/generated/rollups './node_modules/@cartesi/rollups/export/artifacts/**/*.json'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",

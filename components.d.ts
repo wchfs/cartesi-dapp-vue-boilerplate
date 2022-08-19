@@ -7,7 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseContainer: typeof import('./src/components/Containers/BaseContainer.vue')['default']
+    Box: typeof import('./src/components/Box/Box.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    InfoBox: typeof import('./src/components/Box/InfoBox.vue')['default']
+    Menu: typeof import('./src/components/Nav/Menu.vue')['default']
+    Nav: typeof import('./src/components/Nav/Nav.vue')['default']
+    NavMenu: typeof import('./src/components/Nav/NavMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

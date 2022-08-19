@@ -1,5 +1,5 @@
 <template>
-  <el-button>I am ElButton</el-button>
+  Hello DApp!
 </template>
 
 <script setup lang="ts">

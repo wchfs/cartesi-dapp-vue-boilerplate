@@ -1,6 +1,8 @@
 <template>
   <div
     :class="`
+      relative
+      overflow-hidden
       bg-white
       p-6
       rounded-xl

@@ -62,11 +62,40 @@
         />
       </div>
     </div>
+    <div
+      v-if="showButton"
+      class="
+        absolute
+        left-0
+        top-0
+        backdrop-blur-sm
+        bg-white/20
+        w-full
+        h-full
+        flex
+        justify-center
+        items-center
+      "
+    >
+      <el-button
+        v-if="props.buttonText"
+        :type="props.buttonType"
+        size="large"
+        round
+        @click="buttonClick()"
+      >
+        {{ props.buttonText }}
+      </el-button>
+    </div>
   </Box>
 </template>
 
 <script setup lang="ts">
 import Box from '@/components/Box/Box.vue';
+
+const emits = defineEmits([
+  'buttonClick',
+]);
 
 const props = defineProps({
   topText: String,
@@ -81,5 +110,15 @@ const props = defineProps({
     type: String,
     default: 'bg-blue-500',
   },
+  showButton: Boolean,
+  buttonType: {
+    type: String,
+    default: 'success',
+  },
+  buttonText: String,
 });
+
+function buttonClick() {
+  emits('buttonClick');
+}
 </script>

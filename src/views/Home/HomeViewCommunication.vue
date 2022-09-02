@@ -1,6 +1,6 @@
 <template>
   <BaseContainer
-    caption="Rollup Communication"
+    caption="Raw Rollup Communication"
   >
     <Box
       additionalClass="col-span-2"
@@ -9,7 +9,7 @@
         v-model="input"
         :autosize="{ minRows: 2, maxRows: 4 }"
         type="textarea"
-        placeholder="Please input"
+        placeholder="Please place input"
       />
     </Box>
     <Box
@@ -32,6 +32,7 @@
           size="large"
           @click="chainAddInput()"
           :loading="sendingInput"
+          :disabled="input.length < 1"
         >
           <span
             class="font-bold"
@@ -77,9 +78,11 @@
 <script setup lang="ts">
 import BaseContainer from '@/components/Containers/BaseContainer.vue';
 import Box from '@/components/Box/Box.vue';
-import { ref } from 'vue';
+import { ref, h } from 'vue';
 import { useRollupStore } from '@/stores/rollup';
 import type { OnboardComposable } from '@web3-onboard/vue/dist/types';
+import { ElNotification } from 'element-plus';
+import 'element-plus/es/components/notification/style/css';
 
 const props = defineProps<{
   onboard: OnboardComposable,
@@ -97,19 +100,47 @@ const sendingInput = ref(false);
 
 rollupStore.setup(props.onboard);
 
-async function chainAddInput() {
+function chainAddInput() {
   sendingInput.value = true;
-
-  const inputResult = await rollupStore.addInput(input.value);
 
   const newLength = inputs.value.push({
     rawInput: input.value,
     rawOutput: undefined,
   });
 
+  const inputToSend = input.value;
   clearInput();
 
-  inputs.value[newLength - 1].rawOutput = await inputResult.response;
+  ElNotification({
+    title: 'Sending Input',
+    message: 'Your input is placed to send',
+    type: 'info',
+    position: 'bottom-left',
+  });
+
+  rollupStore
+    .addInput(inputToSend)
+    .then((inputResult) => {
+      ElNotification({
+        title: 'Waiting for output',
+        message: 'Your input is processing by rollup',
+        type: 'info',
+        position: 'bottom-left',
+      });
+
+      inputResult.response.then((value) => {
+        ElNotification({
+          title: 'Done',
+          message: h('p', {
+            class: 'text-left',
+          }, 'Your input was successfully processed - watch for output in proper table row'),
+          type: 'success',
+          position: 'bottom-left',
+        });
+
+        inputs.value[newLength - 1].rawOutput = value;
+      });
+    });
 }
 
 function clearInput() {

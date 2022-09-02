@@ -40,10 +40,6 @@ import { useWalletStore } from '@/stores/wallet';
 
 const walletStore = useWalletStore();
 
-if (walletStore.onboard === null) {
-  walletStore.setup();
-}
-
 async function connectWallet() {
   await walletStore.connectWallet();
 }
